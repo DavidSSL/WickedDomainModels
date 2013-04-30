@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using WickedDomainModels.Model;
 
 namespace WickedDomainModels.Services
@@ -56,7 +57,8 @@ namespace WickedDomainModels.Services
 				Value = value,
 				DateExpiring = dateExpiring
 			};
-			member.AssignedOffers.Add(offer);
+		    member.AssignOffer(offer);
+			
 			member.NumberOfActiveOffers++;
 
 			_offerRepository.Save(offer);
