@@ -35,23 +35,8 @@ namespace WickedDomainModels.Model
             var value = offerValueCalculator
                 .CalculateValue(this, offerType);
 
-            var dateExpiring = new DateTime();
-
-            if (offerType.ExpirationType == ExpirationType.Assignment)
-                dateExpiring = DateTime.Now.AddDays(offerType.DaysValid);
-            else if (offerType.ExpirationType == ExpirationType.Fixed)
-            {
-                if (offerType.BeginDate != null)
-                {
-                    dateExpiring = offerType.BeginDate.Value.AddDays(offerType.DaysValid);
-                }
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
-
-
+            var dateExpiring = offerType.CalculateExpiration();
+            
             var offer = new Offer(this, offerType, dateExpiring, value);
 
             _assignedOffers.Add(offer);
