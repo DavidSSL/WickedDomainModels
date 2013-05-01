@@ -1,8 +1,12 @@
 namespace WickedDomainModels.Model
 {
-	public enum ExpirationType
+	public class ExpirationType : Enumeration
 	{
-		Assignment = 1,
-		Fixed = 2
+        private ExpirationType(int value, string displayName)
+            : base(value, displayName)
+        {
+        }
+        public static readonly ExpirationType Assignment = new ExpirationType(1, "Assignment");
+        public static readonly ExpirationType Fixed = new ExpirationType(1, "Fixed");
 	}
 }

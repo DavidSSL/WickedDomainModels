@@ -24,31 +24,13 @@ namespace WickedDomainModels.Services
         }
 
         public void AssignOffer(Guid memberId, Guid offerTypeId)
-		{
-			var member = _memberRepository.GetById(memberId);
-			var offerType = _offerTypeRepository.GetById(offerTypeId);
+        {
+            var member = _memberRepository.GetById(memberId);
+            var offerType = _offerTypeRepository.GetById(offerTypeId);
             
-			DateTime dateExpiring;
+            var offer = member.AssignOffer(offerType, _offerValueCalculator);
 
-			switch (offerType.ExpirationType)
-			{
-				case ExpirationType.Assignment:
-					dateExpiring = DateTime.Now.AddDays(offerType.DaysValid);
-					break;
-				case ExpirationType.Fixed:
-					if (offerType.BeginDate != null)
-						dateExpiring =
-							offerType.BeginDate.Value.AddDays(offerType.DaysValid);
-					else
-						throw new InvalidOperationException();
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-			
-		    var offer = member.AssignOffer(offerType, dateExpiring, _offerValueCalculator);
-
-			_offerRepository.Save(offer);
-		}
+            _offerRepository.Save(offer);
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Before.Model
+namespace WickedDomainModels.Model
 {
 	[Serializable]
 	public abstract class Enumeration : IComparable

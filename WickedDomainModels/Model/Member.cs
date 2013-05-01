@@ -29,17 +29,34 @@ namespace WickedDomainModels.Model
 
         public int NumberOfActiveOffers { get; private set; }
 
-        public Offer AssignOffer(OfferType offerType, DateTime dateExpiring
+        public Offer AssignOffer(OfferType offerType
             , IOfferValueCalculator offerValueCalculator)
         {
             var value = offerValueCalculator
                 .CalculateValue(this, offerType);
 
+            var dateExpiring = new DateTime();
+
+            if (offerType.ExpirationType == ExpirationType.Assignment)
+                dateExpiring = DateTime.Now.AddDays(offerType.DaysValid);
+            else if (offerType.ExpirationType == ExpirationType.Fixed)
+            {
+                if (offerType.BeginDate != null)
+                {
+                    dateExpiring = offerType.BeginDate.Value.AddDays(offerType.DaysValid);
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException();
+            }
+
+
             var offer = new Offer(this, offerType, dateExpiring, value);
 
             _assignedOffers.Add(offer);
             NumberOfActiveOffers++;
-            
+
             return offer;
         }
     }
