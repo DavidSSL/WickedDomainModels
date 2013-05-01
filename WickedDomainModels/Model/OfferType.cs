@@ -19,23 +19,7 @@ namespace WickedDomainModels.Model
 
 	    public DateTime CalculateExpiration()
 	    {
-	        var dateExpiring = new DateTime();
-
-            if (ExpirationType == ExpirationType.Assignment)
-                dateExpiring = DateTime.Now.AddDays(DaysValid);
-            else if (ExpirationType == ExpirationType.Fixed)
-            {
-                if (BeginDate != null)
-                {
-                    dateExpiring = BeginDate.Value.AddDays(DaysValid);
-                }
-                // Notice that we haven't got the else throwing an InvalidOperationException
-                // here because we are going to deal with this later.
-            }
-            else
-            {
-                throw new InvalidOperationException();
-            }
+	        var dateExpiring = ExpirationType.CalculateExpiration(this);
 	        return dateExpiring;
 	    }
 	}
