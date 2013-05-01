@@ -2,35 +2,43 @@ using System;
 
 namespace WickedDomainModels.Model
 {
-	public class ExpirationType : Enumeration
+	public abstract class ExpirationType : Enumeration
 	{
         private ExpirationType(int value, string displayName)
             : base(value, displayName)
         {
         }
-        public static readonly ExpirationType Assignment = new ExpirationType(1, "Assignment");
-        public static readonly ExpirationType Fixed = new ExpirationType(1, "Fixed");
+        
+        public static readonly ExpirationType Assignment = 
+            new AssignmentType();
+        public static readonly ExpirationType Fixed = 
+            new FixedType();
 
-	    public DateTime CalculateExpiration(OfferType offerType)
-	    {
-            var dateExpiring = new DateTime();
+	    public abstract DateTime CalculateExpiration(OfferType offerType);
 
-            if (this == Assignment)
-                dateExpiring = DateTime.Now.AddDays(offerType.DaysValid);
-            else if (this == Fixed)
+        private class AssignmentType: ExpirationType{
+            public AssignmentType() 
+                : base(1, "Assignment")
             {
-                if (offerType.BeginDate != null)
-                {
-                    dateExpiring = offerType.BeginDate.Value.AddDays(offerType.DaysValid);
-                }
-                // Notice that we haven't got the else throwing an InvalidOperationException
-                // here because we are going to deal with this later.
             }
-            else
+
+            public override DateTime CalculateExpiration(OfferType offerType)
             {
-                throw new InvalidOperationException();
+                return DateTime.Now.AddDays(offerType.DaysValid);
             }
-	        return dateExpiring;
-	    }
+        }
+
+        private class FixedType : ExpirationType
+        {
+            public FixedType()
+                : base(2, "Fixed")
+            {
+            }
+
+            public override DateTime CalculateExpiration(OfferType offerType)
+            {
+                return offerType.BeginDate.Value.AddDays(offerType.DaysValid);
+            }
+        }
 	}
 }

@@ -12,9 +12,7 @@ namespace WickedDomainModels.Model
 		private readonly int _value;
 		private readonly string _displayName;
 
-		protected Enumeration()
-		{
-		}
+		protected Enumeration(){}
 
 		protected Enumeration(int value, string displayName)
 		{
