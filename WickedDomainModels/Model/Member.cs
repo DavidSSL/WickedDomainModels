@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using WickedDomainModels.Services;
 
 namespace WickedDomainModels.Model
 {
@@ -27,10 +29,18 @@ namespace WickedDomainModels.Model
 
         public int NumberOfActiveOffers { get; private set; }
 
-        public void AssignOffer(Offer offer)
+        public Offer AssignOffer(OfferType offerType, DateTime dateExpiring
+            , IOfferValueCalculator offerValueCalculator)
         {
+            var value = offerValueCalculator
+                .CalculateValue(this, offerType);
+
+            var offer = new Offer(this, offerType, dateExpiring, value);
+
             _assignedOffers.Add(offer);
             NumberOfActiveOffers++;
+            
+            return offer;
         }
     }
 }

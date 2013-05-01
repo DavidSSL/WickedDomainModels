@@ -27,10 +27,7 @@ namespace WickedDomainModels.Services
 		{
 			var member = _memberRepository.GetById(memberId);
 			var offerType = _offerTypeRepository.GetById(offerTypeId);
-
-			var value = _offerValueCalculator
-				.CalculateValue(member, offerType);
-
+            
 			DateTime dateExpiring;
 
 			switch (offerType.ExpirationType)
@@ -48,10 +45,8 @@ namespace WickedDomainModels.Services
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-
-		    var offer = new Offer(member, offerType, dateExpiring, value);
 			
-		    member.AssignOffer(offer);
+		    var offer = member.AssignOffer(offerType, dateExpiring, _offerValueCalculator);
 
 			_offerRepository.Save(offer);
 		}
