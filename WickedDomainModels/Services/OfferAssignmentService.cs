@@ -52,8 +52,6 @@ namespace WickedDomainModels.Services
 		    var offer = new Offer(member, offerType, dateExpiring, value);
 			
 		    member.AssignOffer(offer);
-			
-			member.NumberOfActiveOffers++;
 
 			_offerRepository.Save(offer);
 		}

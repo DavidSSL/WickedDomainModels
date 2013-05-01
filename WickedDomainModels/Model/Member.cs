@@ -30,6 +30,7 @@ namespace WickedDomainModels.Model
         public void AssignOffer(Offer offer)
         {
             _assignedOffers.Add(offer);
+            NumberOfActiveOffers++;
         }
     }
 }
