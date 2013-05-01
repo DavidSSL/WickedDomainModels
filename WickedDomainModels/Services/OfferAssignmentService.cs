@@ -1,30 +1,29 @@
 using System;
-using System.Collections.Generic;
 using WickedDomainModels.Model;
 
 namespace WickedDomainModels.Services
 {
     public class OfferAssignmentService
-	{
-		private readonly IMemberRepository _memberRepository;
-		private readonly IOfferTypeRepository _offerTypeRepository;
-		private readonly IOfferValueCalculator _offerValueCalculator;
-		private readonly IOfferRepository _offerRepository;
+    {
+        private readonly IMemberRepository _memberRepository;
+        private readonly IOfferTypeRepository _offerTypeRepository;
+        private readonly IOfferValueCalculator _offerValueCalculator;
+        private readonly IOfferRepository _offerRepository;
 
-		public OfferAssignmentService(
-			IMemberRepository memberRepository,
-			IOfferTypeRepository offerTypeRepository,
-			IOfferValueCalculator offerValueCalculator,
-			IOfferRepository offerRepository
-			)
-		{
-			_memberRepository = memberRepository;
-			_offerTypeRepository = offerTypeRepository;
-			_offerValueCalculator = offerValueCalculator;
-			_offerRepository = offerRepository;
-		}
+        public OfferAssignmentService(
+            IMemberRepository memberRepository,
+            IOfferTypeRepository offerTypeRepository,
+            IOfferValueCalculator offerValueCalculator,
+            IOfferRepository offerRepository
+            )
+        {
+            _memberRepository = memberRepository;
+            _offerTypeRepository = offerTypeRepository;
+            _offerValueCalculator = offerValueCalculator;
+            _offerRepository = offerRepository;
+        }
 
-		public void AssignOffer(Guid memberId, Guid offerTypeId)
+        public void AssignOffer(Guid memberId, Guid offerTypeId)
 		{
 			var member = _memberRepository.GetById(memberId);
 			var offerType = _offerTypeRepository.GetById(offerTypeId);
@@ -50,18 +49,13 @@ namespace WickedDomainModels.Services
 					throw new ArgumentOutOfRangeException();
 			}
 
-			var offer = new Offer
-			{
-				MemberAssigned = member,
-				Type = offerType,
-				Value = value,
-				DateExpiring = dateExpiring
-			};
+		    var offer = new Offer(member, offerType, dateExpiring, value);
+			
 		    member.AssignOffer(offer);
 			
 			member.NumberOfActiveOffers++;
 
 			_offerRepository.Save(offer);
 		}
-	}
+    }
 }
