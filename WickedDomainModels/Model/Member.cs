@@ -25,7 +25,7 @@ namespace WickedDomainModels.Model
             get { return _assignedOffers; }
         }
 
-        public int NumberOfActiveOffers { get; set; }
+        public int NumberOfActiveOffers { get; private set; }
 
         public void AssignOffer(Offer offer)
         {
